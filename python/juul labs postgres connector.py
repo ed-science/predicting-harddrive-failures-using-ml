@@ -23,8 +23,7 @@ def get_all_tables(cur):
 	print('Extracting list of tables:')
 	cur.execute("SELECT * FROM pg_catalog.pg_tables where schemaname NOT IN ('pg_catalog', 'information_schema')")
 	tables = cur.fetchall()
-	t = [i[1] for i in tables]
-	return t
+	return [i[1] for i in tables]
 
 
 def lookup_a_table(cur, tablename):
@@ -35,10 +34,9 @@ def lookup_a_table(cur, tablename):
 	# get table_data
 	cur.execute("SELECT count(*) from "+tablename)
 	table_rows = cur.fetchall()
-	print("Number of rows in table: {} are {}".format(tablename, table_rows))
+	print(f"Number of rows in table: {tablename} are {table_rows}")
 	cur.execute("SELECT * from "+tablename)
-	table_data = cur.fetchall()
-	return table_data
+	return cur.fetchall()
 
 
 def get_table_columns(cur, tablename):
@@ -68,7 +66,7 @@ def clean_response(table, data, column_names):
 	data.columns = [column_names]
 	print(data.head())
 	out_file = 'out_data_from_tablename_'+table+'.csv'
-	print('Saving data from table: {}, to file: {}'.format(table, out_file))
+	print(f'Saving data from table: {table}, to file: {out_file}')
 	data.to_csv(out_file, index=False, encoding='utf-8')
 	print('Done.')
 
